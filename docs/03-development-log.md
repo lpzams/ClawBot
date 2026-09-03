@@ -1,4 +1,7 @@
-# ClawBot 开发日志
+---
+layout: page
+title: ClawBot 开发日志
+---
 
 这个文件记录每次开发的目标、命令、关键判断、验证结果和下一步。它不是流水账；只保留以后复盘和面试讲解真正有用的信息。
 
@@ -126,3 +129,45 @@ python -m clawbot "   "
 2. 创建 GitHub 远程仓库并推送 `main` 与功能分支。
 3. 用 PR 练习审查和合并。
 4. 建立 Python 3.12 环境后开始真实模型 adapter。
+
+## 2026-09-03｜Session 003｜公开仓库与学习网站
+
+### 本次目标
+
+把本地学习项目发布为公开 GitHub 仓库，并让 `docs/` 成为任何人都能访问的网站。
+
+### GitHub 实操记录
+
+1. 使用 GitHub 设备授权登录账号 `lpzams`。
+2. 创建公开仓库：<https://github.com/lpzams/ClawBot>。
+3. 创建 [Issue #1](https://github.com/lpzams/ClawBot/issues/1) 定义 Phase 1 验收条件。
+4. 推送 `feat/minimal-loop` 并创建 [PR #2](https://github.com/lpzams/ClawBot/pull/2)。
+5. 复查目标分支、文件列表、可合并状态，并再次运行测试。
+6. 用 merge commit 合并 PR，自动关闭 Issue #1。
+7. 同步本地 `main`，确认旧 worktree 干净后将其移除。
+8. 从最新 `main` 创建 `docs/github-pages` worktree。
+9. 创建 [Issue #3](https://github.com/lpzams/ClawBot/issues/3) 记录网站验收条件。
+
+### 网站方案
+
+直接使用 GitHub Pages 的 `main` 分支 `/docs` 目录：
+
+```text
+Markdown 文档 -> GitHub Pages/Jekyll -> 公共网页
+```
+
+只增加首页、Jekyll front matter 和 `_config.yml`。没有建立独立前端，也不提交生成后的 HTML。
+
+### 关键决定
+
+- 仓库设为公开，方便面试官和其他学习者查看历史、issue、PR 与代码。
+- 保留 issue 和 merge commit，让开发过程本身也成为作品的一部分。
+- 使用 GitHub 原生 Pages；当前内容站不需要前端框架和自建服务器。
+- Pages 地址固定为 <https://lpzams.github.io/ClawBot/>。
+
+### 下一步
+
+1. 通过 PR 合并 Pages 配置。
+2. 把 Pages 源设置为 `main` 的 `/docs`。
+3. 等待 GitHub 构建，并验证公开地址。
+4. 下一阶段建立 Python 3.12 环境并接入真实模型。

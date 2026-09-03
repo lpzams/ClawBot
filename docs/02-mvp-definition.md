@@ -1,4 +1,7 @@
-# ClawBot 最小产品定义
+---
+layout: page
+title: ClawBot 最小产品定义
+---
 
 ## 1. 一句话定义
 
