@@ -2,6 +2,8 @@
 
 ClawBot 是一个用于认真学习 **AI Harness（AI 智能体运行框架）** 的最小项目。
 
+在线学习站：<https://lpzams.github.io/ClawBot/>
+
 我们不会先套用大型 Agent 框架，而是从一条可测试的执行链开始，亲手实现：
 
 ```text
@@ -28,6 +30,7 @@ ClawBot 是一个用于认真学习 **AI Harness（AI 智能体运行框架）**
 3. [ClawBot 最小产品定义](docs/02-mvp-definition.md)
 4. [开发日志](docs/03-development-log.md)
 5. [Phase 1：最小执行链](docs/04-phase-1-minimal-loop.md)
+6. [发布到 GitHub Pages](docs/05-publishing-github-pages.md)
 
 ## 技术选择
 

@@ -1,4 +1,7 @@
-# Git、GitHub 与 worktree 实操手册
+---
+layout: page
+title: Git、GitHub 与 worktree 实操手册
+---
 
 ## 1. 先分清三个概念
 

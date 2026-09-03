@@ -1,4 +1,7 @@
-# ClawBot 学习与开发路线
+---
+layout: page
+title: ClawBot 学习与开发路线
+---
 
 ## 1. 我们到底在开发什么
 
