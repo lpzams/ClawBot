@@ -12,13 +12,14 @@ ClawBot 是一个用于认真学习 **AI Harness（AI 智能体运行框架）**
 
 ## 当前状态
 
-项目处于 **Phase 0：仓库与需求基线**。
+项目处于 **Phase 1：可测试的最小执行链**。
 
 - [x] 初始化本地 Git 仓库，默认分支为 `main`
 - [x] 定义最小产品范围和学习路线
 - [x] 编写 GitHub 与 worktree 实操手册
-- [ ] 创建第一个功能 worktree
-- [ ] 实现不依赖真实模型的最小 Harness 循环
+- [x] 创建第一个功能 worktree
+- [x] 实现不依赖真实模型的最小 Harness 循环
+- [ ] 接入真实模型 API
 
 ## 文档
 
@@ -26,6 +27,7 @@ ClawBot 是一个用于认真学习 **AI Harness（AI 智能体运行框架）**
 2. [Git、GitHub 与 worktree](docs/01-git-github-worktree.md)
 3. [ClawBot 最小产品定义](docs/02-mvp-definition.md)
 4. [开发日志](docs/03-development-log.md)
+5. [Phase 1：最小执行链](docs/04-phase-1-minimal-loop.md)
 
 ## 技术选择
 
@@ -36,3 +38,10 @@ ClawBot 是一个用于认真学习 **AI Harness（AI 智能体运行框架）**
 - 暂不引入 LangChain、数据库、Web UI 或多 Agent
 
 这些延后项不是永远不做，而是等核心执行链跑通、并且有明确需求时再加入。
+
+## 当前演示
+
+```powershell
+python -m unittest discover -s tests -v
+python -m clawbot "hello harness"
+```

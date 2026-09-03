@@ -47,3 +47,82 @@ git init -b main
 1. 建立基线 commit。
 2. 创建 `feat/minimal-loop` worktree。
 3. 在该 worktree 中实现第一个失败测试和最小执行链。
+
+## 2026-09-03｜Session 002｜最小执行链
+
+### 本次目标
+
+在独立 worktree 中完成一条不依赖网络和 API Key 的执行链：
+
+```text
+CLI 输入 -> run_agent -> Fake Model -> 固定回答
+```
+
+### Git 操作
+
+基线提交：
+
+```text
+3b42887 docs: define ClawBot learning roadmap
+```
+
+创建本分支的命令：
+
+```powershell
+git worktree add .worktrees/minimal-loop -b feat/minimal-loop main
+```
+
+教学环境把 worktree 放在仓库内已忽略的 `.worktrees/` 中；日常开发更推荐手册中的同级目录布局。
+
+### 红灯：先证明功能不存在
+
+先创建 `tests/test_agent.py`，再运行：
+
+```powershell
+python -m unittest discover -s tests -v
+```
+
+第一次结果是 `ModuleNotFoundError: No module named 'clawbot'`。这说明测试确实在寻找尚未实现的产品入口，而不是一个无论如何都会通过的空测试。
+
+### 绿灯：最少实现
+
+新增：
+
+- `clawbot/agent.py`：校验输入并把用户消息交给模型。
+- `clawbot/__main__.py`：使用 `argparse` 提供 CLI 和离线 Fake Model。
+- `clawbot/__init__.py`：标记 Python 包。
+
+模型暂时只是一个传入 `run_agent` 的函数。函数参数已经能让测试替换真实模型，因此没有创建单实现接口、工厂或容器。
+
+### 验证结果
+
+```text
+Ran 2 tests in 0.000s
+OK
+```
+
+```powershell
+python -m clawbot "hello harness"
+# ClawBot received: hello harness
+
+python -m clawbot "   "
+# error: prompt cannot be blank
+```
+
+### 环境发现
+
+当前机器只有 Python 3.9.13。Phase 1 的标准库代码可以运行，但 Python 3.9 已结束官方支持；接入真实模型前应建立 Python 3.12 虚拟环境，并把版本要求写入项目配置。
+
+### 关键决定
+
+- 用 `unittest` 而不是安装测试框架：当前两个行为不需要额外依赖。
+- 用普通字典表示消息：它与模型 API 的 JSON 结构接近，当前足够。
+- 用字符串表示模型回复：工具调用出现后再升级为结构化响应。
+- 保留空输入校验：CLI 是输入边界，失败应明确且可预测。
+
+### 下一步
+
+1. 本分支以 `feat: add minimal agent loop` 建立功能提交。
+2. 创建 GitHub 远程仓库并推送 `main` 与功能分支。
+3. 用 PR 练习审查和合并。
+4. 建立 Python 3.12 环境后开始真实模型 adapter。
