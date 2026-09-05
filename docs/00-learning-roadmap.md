@@ -49,7 +49,7 @@ flowchart LR
 
 ## 4. 分阶段路线
 
-### Phase 0：仓库与问题定义（当前阶段）
+### Phase 0：仓库与问题定义（已完成）
 
 产物：
 
@@ -61,7 +61,7 @@ flowchart LR
 
 验收：新加入的人只看文档，就知道项目解决什么问题以及下一步做什么。
 
-### Phase 1：可测试的最小执行链
+### Phase 1：可测试的最小执行链（已完成）
 
 实现：
 
@@ -73,13 +73,21 @@ CLI 输入 -> Agent -> Fake Model -> 最终回答
 
 验收：不需要 API Key，执行一条命令即可得到固定答案；一条测试可以证明消息正确传给模型。
 
-### Phase 2：接入真实模型
+### Phase 2：可复用核心与真实模型适配器（当前阶段）
 
-实现官方模型 SDK adapter，配置从环境变量读取。
+把一次调用封装成项目无关的 `Harness`，再实现一个 OpenAI-compatible adapter，配置从环境变量读取。
 
-重点学习：API 请求、超时、错误边界、密钥管理、Fake 与真实服务的分工。
+重点学习：依赖注入、API 请求、超时、错误边界、密钥管理、Fake 与真实服务的分工，以及框架层与业务层的边界。
 
-验收：有 Key 时可以真实对话；没有 Key 时得到明确错误；测试仍然不访问网络。
+验收：其他项目可以直接导入 `Harness`；有 Key 时可以真实对话；没有 Key 时得到明确错误；自动测试仍然不访问网络。
+
+### Phase 2.5：Jenkins CI/CD 学习
+
+用根目录的 `Jenkinsfile` 把代码检出、自动测试、CLI 冒烟检查、源码打包和交付物归档串起来。
+
+重点学习：Pipeline as Code、Jenkins agent、构建阶段、失败反馈、交付物和凭据边界。
+
+验收：Jenkins 可以从 Git 仓库读取 `Jenkinsfile`，测试失败时构建变红，测试通过时在构建详情中得到可下载的源码 ZIP。
 
 ### Phase 3：工具调用循环
 
@@ -117,8 +125,8 @@ CLI 输入 -> Agent -> Fake Model -> 最终回答
 - 数据库：在需要持久会话或多人使用前，文件和内存足够。
 - RAG：它是检索能力，不是最小 Agent loop 的前置条件。
 - 多 Agent：单 Agent 的状态、安全和评测没做好前，多 Agent 只会放大问题。
-- 自制通用框架：ClawBot 是一个可解释的产品，不是为了猜测未来需求的平台。
+- 工具注册表、状态机和多 Agent：当前一次调用协议已经够复用，等真实项目提出需求再扩展。
 
 ## 6. 下一步
 
-从 `main` 创建 `feat/minimal-loop` worktree，在其中完成 Phase 1。开始前先阅读 [Git、GitHub 与 worktree](01-git-github-worktree.md)。
+先按 [Jenkins CI/CD 实操]({{ '/07-jenkins-ci-cd.html' | relative_url }}) 跑通自动测试和交付归档，再用 [可复用框架接入指南]({{ '/06-reusable-framework.html' | relative_url }}) 把 `Harness` 接到一个独立的小业务函数，最后做一次真实 API 手工验证。工具循环只有在这个边界稳定后才进入 Phase 3。

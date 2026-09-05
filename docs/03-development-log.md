@@ -114,7 +114,7 @@ python -m clawbot "   "
 
 ### 环境发现
 
-当前机器只有 Python 3.9.13。Phase 1 的标准库代码可以运行，但 Python 3.9 已结束官方支持；接入真实模型前应建立 Python 3.12 虚拟环境，并把版本要求写入项目配置。
+当前机器只有 Python 3.9.13。Phase 1 的标准库代码可以运行，但 Python 3.9 已结束官方支持；接入真实模型前应建立 Python 3.12 虚拟环境，并把版本要求写入项目配置。本阶段为了方便复用，代码仍保持 3.9 语法兼容，实际部署推荐 3.11/3.12。
 
 ### 关键决定
 
@@ -171,3 +171,77 @@ Markdown 文档 -> GitHub Pages/Jekyll -> 公共网页
 2. 把 Pages 源设置为 `main` 的 `/docs`。
 3. 等待 GitHub 构建，并验证公开地址。
 4. 下一阶段建立 Python 3.12 环境并接入真实模型。
+
+## 2026-09-03｜Session 004｜可复用核心与模型适配器
+
+### 本次目标
+
+让 ClawBot 不只是当前仓库的演示命令，而是可以被其他项目直接导入的最小框架，同时保持离线测试。
+
+### 实际操作
+
+新增：
+
+- `clawbot.agent.Harness`：项目无关的一次模型调用边界。
+- `clawbot.models.OpenAICompatibleModel`：只使用标准库的真实模型 adapter。
+- `pyproject.toml`：允许以 editable package 方式接入其他项目。
+- `docs/06-reusable-framework.md`：解释层次、数据流、接入步骤和当前上限。
+
+保留：
+
+- `run_agent` 作为旧代码的兼容函数。
+- Fake Model 作为默认 CLI provider。
+- 所有自动测试不访问网络。
+
+### 关键决定
+
+- Harness 只接受 `messages -> string` 的可调用对象，不绑定供应商 SDK。
+- OpenAI-compatible adapter 放在独立模块，便于替换为其他 provider。
+- 不提前加入工具注册表、状态机或事件系统；这些属于后续阶段，当前字符串协议无法证明它们有真实需求。
+- 使用 `urllib` 而不是新增 HTTP 依赖，降低其他项目的接入成本。
+
+### 验证
+
+```text
+Ran 7 tests in 0.001s
+OK
+```
+
+测试覆盖：消息编排、system prompt、空输入、返回值边界、请求构造、环境变量校验和异常响应解析。
+
+### 下一步
+
+1. 建立 Python 3.11/3.12 虚拟环境并运行 `pip install -e .`。
+2. 使用真实 API 做一次手工 smoke test，不把它放进默认自动测试。
+3. 若一个实际项目需要工具，再开始 Phase 3 的结构化响应和受限工具循环。
+
+## 2026-09-04｜Session 005｜接入 Jenkins CI/CD 学习链路
+
+### 本次目标
+
+让学习项目具备一条不依赖真实模型 API 的 Jenkins CI/CD 流水线，并能在本地复现同样的检查。
+
+### 实际操作
+
+新增：
+
+- 根目录 `Jenkinsfile`：`Checkout -> Test -> Smoke -> Build -> Deliver`。
+- `docs/07-jenkins-ci-cd.md`：Jenkins 启动、任务配置、失败演练和凭据边界。
+
+同步更新 README、学习路线和站点首页导航。
+
+### 关键决定
+
+- 使用 Jenkins Pipeline as Code，避免把构建步骤散落在 Jenkins 网页配置中。
+- CI 只运行离线 `unittest` 和 Fake Model CLI 冒烟检查，不在构建中消耗真实 API。
+- CD 先做到持续交付：用 `git archive` 生成并归档通过检查的源码 ZIP；当前没有真实部署目标，因此不添加虚假的生产部署脚本。
+- Jenkinsfile 兼容 Linux 和 Windows agent，只依赖 Python、Git 及 Jenkins 内置步骤。
+
+### 验证
+
+```powershell
+python -m unittest discover -s tests -v
+python -m clawbot "hello harness"
+```
+
+下一次在 Jenkins 中选择 **Pipeline script from SCM**，指向仓库根目录的 `Jenkinsfile`，即可观察同一条链路。

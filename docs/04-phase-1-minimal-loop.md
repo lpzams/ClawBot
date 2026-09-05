@@ -50,7 +50,7 @@ def run_agent(prompt, model):
     return model([{"role": "user", "content": prompt}])
 ```
 
-这里的 `model` 是函数参数，这是一种最小依赖注入：生产环境可以传真实模型函数，测试可以传 Fake Model。当前没有必要再创建抽象基类、工厂或依赖注入框架。
+这里的 `model` 是函数参数，这是一种最小依赖注入：生产环境可以传真实模型函数，测试可以传 Fake Model。Phase 1 当时没有必要创建抽象基类、工厂或依赖注入框架；Phase 2 只增加了一个具体的 `Harness` 外壳，仍然没有引入这些重量级结构。
 
 ## 5. CLI 只负责输入输出
 
@@ -108,4 +108,4 @@ git diff
 3. 解释为什么 `run_agent("   ", model)` 不应该调用模型。
 4. 执行 `git diff -- tests/test_agent.py clawbot`，逐行说明每个改动解决哪个验收条件。
 
-完成这些练习后，再进入真实模型 adapter；否则只是“代码跑通”，还没有真正学会。
+完成这些练习后，继续阅读[可复用框架接入指南]({{ '/06-reusable-framework.html' | relative_url }})，看同一个模型函数边界如何被其他项目复用，再进入真实模型 adapter。

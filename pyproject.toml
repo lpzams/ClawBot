@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "clawbot-harness"
+version = "0.1.0"
+description = "A small, provider-neutral AI harness"
+readme = "README.md"
+requires-python = ">=3.9"
+
+[project.scripts]
+clawbot = "clawbot.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["clawbot*"]

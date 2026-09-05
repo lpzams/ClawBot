@@ -1,0 +1,22 @@
+{
+  "student_name": "lapz",
+  "current_phase": "phase2-adapter",
+  "current_workbook": "learning/workbooks/阶段2-学习笔记.md",
+  "last_updated": "2026-09-05T00:00:00Z",
+  "completed_phases": [
+    {
+      "phase": "phase1-minimal-loop",
+      "completed_date": "2026-09-03",
+      "model_used": "claude-opus-4-8"
+    }
+  ],
+  "interview_readiness": {
+    "ready_topics": ["phase1-minimal-loop"],
+    "practicing_topics": ["phase2-adapter"],
+    "future_topics": ["phase3-tool-loop"]
+  },
+  "enterprise_cases_studied": [
+    "netflix-chaos-engineering"
+  ],
+  "notes": "此状态文件用于 AI 模型切换时恢复学习进度。任何模型（Claude/Codex）都应先读取此文件。"
+}
